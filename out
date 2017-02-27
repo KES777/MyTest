@@ -1,0 +1,43 @@
+STACK 1 TYPE 12
+/home/kes/work/tmp/perl/bin/perl() [0x421574]
+/home/kes/work/tmp/perl/bin/perl(Perl_newOP+0xa4) [0x429d04]
+/home/kes/work/tmp/perl/bin/perl(Perl_yylex+0x300) [0x470290]
+/home/kes/work/tmp/perl/bin/perl(Perl_yyparse+0x80b) [0x48ad4b]
+/home/kes/work/tmp/perl/bin/perl() [0x44f20c]
+/home/kes/work/tmp/perl/bin/perl(perl_parse+0x3df) [0x450aef]
+/home/kes/work/tmp/perl/bin/perl(main+0x80) [0x420540]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0) [0x7ff2f1527830]
+/home/kes/work/tmp/perl/bin/perl(_start+0x29) [0x420609]
+Keyword 0
+STACK XS
+blib/arch//auto/MyTest/MyTest.so(+0xb6e) [0x7ff2f0c9fb6e]
+blib/arch//auto/MyTest/MyTest.so(+0xc4a) [0x7ff2f0c9fc4a]
+/home/kes/work/tmp/perl/bin/perl(Perl_yylex+0x300) [0x470290]
+/home/kes/work/tmp/perl/bin/perl(Perl_yyparse+0x80b) [0x48ad4b]
+/home/kes/work/tmp/perl/bin/perl() [0x44f20c]
+/home/kes/work/tmp/perl/bin/perl(perl_parse+0x3df) [0x450aef]
+/home/kes/work/tmp/perl/bin/perl(main+0x80) [0x420540]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0) [0x7ff2f1527830]
+/home/kes/work/tmp/perl/bin/perl(_start+0x29) [0x420609]
+PRE
+STACK 3 TYPE 12
+/home/kes/work/tmp/perl/bin/perl() [0x421574]
+/home/kes/work/tmp/perl/bin/perl(Perl_ck_my+0x11) [0x426641]
+blib/arch//auto/MyTest/MyTest.so(+0xc9f) [0x7ff2f0c9fc9f]
+/home/kes/work/tmp/perl/bin/perl(Perl_yylex+0x300) [0x470290]
+/home/kes/work/tmp/perl/bin/perl(Perl_yyparse+0x80b) [0x48ad4b]
+/home/kes/work/tmp/perl/bin/perl() [0x44f20c]
+/home/kes/work/tmp/perl/bin/perl(perl_parse+0x3df) [0x450aef]
+/home/kes/work/tmp/perl/bin/perl(main+0x80) [0x420540]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0) [0x7ff2f1527830]
+/home/kes/work/tmp/perl/bin/perl(_start+0x29) [0x420609]
+Keyword OLD 12
+STACK 2 TYPE 12
+/home/kes/work/tmp/perl/bin/perl() [0x421574]
+/home/kes/work/tmp/perl/bin/perl(Perl_newSVREF+0x16) [0x42ef26]
+/home/kes/work/tmp/perl/bin/perl(Perl_yyparse+0x1834) [0x48bd74]
+/home/kes/work/tmp/perl/bin/perl() [0x44f20c]
+/home/kes/work/tmp/perl/bin/perl(perl_parse+0x3df) [0x450aef]
+/home/kes/work/tmp/perl/bin/perl(main+0x80) [0x420540]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0) [0x7ff2f1527830]
+/home/kes/work/tmp/perl/bin/perl(_start+0x29) [0x420609]
