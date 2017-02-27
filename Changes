@@ -1,0 +1,6 @@
+Revision history for Perl extension MyTest.
+
+0.01  Fri Feb 24 22:36:51 2017
+	- original version; created by h2xs 1.23 with options
+		-A -n MyTest
+
