@@ -37,7 +37,7 @@ sub import
 }
 
 sub mysub {
-	print "Im here\n";
+	print +(caller(0))[0..2], "Im here\n";
 }
 
 1;
