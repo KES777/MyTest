@@ -135,6 +135,30 @@ static OP *my_check(pTHX_ OP *op) {
     return old_checker(op);
 }
 
+char* curr_package() {
+    int count;
+
+    dSP;
+    ENTER;
+    SAVETMPS;
+    PUSHMARK(SP);
+
+    PUTBACK;
+    count =  call_pv( "MyTest::get_package", G_SCALAR );
+
+    SPAGAIN;
+    if( count != 1 )
+        croak("Big trouble\n");
+
+    char *pn =  POPp;
+
+    PUTBACK;
+    FREETMPS;
+    LEAVE;
+
+    return pn;
+}
+
 
 /* http://perldoc.perl.org/perlguts.html#Compile-pass-3%3a-peephole-optimization */
 static peep_t old_rpeepp;
@@ -149,13 +173,35 @@ static void my_rpeep(pTHX_ OP *o)
     old_rpeepp(aTHX_ orig_o);
 }
 
+
+
+
 MODULE = MyTest    PACKAGE = MyTest
 
 BOOT:
-    wrap_op_checker(OP_ENTERSUB, my_check, &old_checker);
+    // wrap_op_checker(OP_ENTERSUB, my_check, &old_checker);
 
     // old_rpeepp = PL_rpeepp;
     // PL_rpeepp   = my_rpeep;
 
-    Runops_Trace_load_B(aTHX);
+    // Runops_Trace_load_B(aTHX);
 
+
+SV*
+tc()
+PPCODE:
+    // PUSHi( 42 );
+    // XPUSHs(sv_2mortal(newSViv(42)));
+    // mXPUSHs( newSViv( 42 ) );
+
+    // XPUSHs(newSViv(42)); // Possibly memory leak
+    // dMY_CXT;
+    const PERL_CONTEXT *cx =  caller_cx(0, NULL);
+    printf( "2.1 %p\n", cx );
+
+    char * name =  curr_package();
+    printf( "Name: %s\n", name );
+    SV* sv;
+    sv =  newSVpvs( "Hello" );
+    // sv =  newSVpv( name, 0 );
+    mXPUSHs( sv );

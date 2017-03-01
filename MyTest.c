@@ -144,6 +144,30 @@ static OP *my_check(pTHX_ OP *op) {
     return old_checker(op);
 }
 
+char* curr_package() {
+    int count;
+
+    dSP;
+    ENTER;
+    SAVETMPS;
+    PUSHMARK(SP);
+
+    PUTBACK;
+    count =  call_pv( "MyTest::get_package", G_SCALAR );
+
+    SPAGAIN;
+    if( count != 1 )
+        croak("Big trouble\n");
+
+    char *pn =  POPp;
+
+    PUTBACK;
+    FREETMPS;
+    LEAVE;
+
+    return pn;
+}
+
 
 /* http://perldoc.perl.org/perlguts.html#Compile-pass-3%3a-peephole-optimization */
 static peep_t old_rpeepp;
@@ -158,7 +182,10 @@ static void my_rpeep(pTHX_ OP *o)
     old_rpeepp(aTHX_ orig_o);
 }
 
-#line 162 "MyTest.c"
+
+
+
+#line 189 "MyTest.c"
 #ifndef PERL_UNUSED_VAR
 #  define PERL_UNUSED_VAR(var) if (0) var = var
 #endif
@@ -302,7 +329,40 @@ S_croak_xs_usage(const CV *const cv, const char *const params)
 #  define newXS_deffile(a,b) Perl_newXS_deffile(aTHX_ a,b)
 #endif
 
-#line 306 "MyTest.c"
+#line 333 "MyTest.c"
+
+XS_EUPXS(XS_MyTest_tc); /* prototype to pass -Wmissing-prototypes */
+XS_EUPXS(XS_MyTest_tc)
+{
+    dVAR; dXSARGS;
+    if (items != 0)
+       croak_xs_usage(cv,  "");
+    PERL_UNUSED_VAR(ax); /* -Wall */
+    SP -= items;
+    {
+	SV *	RETVAL;
+#line 193 "MyTest.xs"
+    // PUSHi( 42 );
+    // XPUSHs(sv_2mortal(newSViv(42)));
+    // mXPUSHs( newSViv( 42 ) );
+
+    // XPUSHs(newSViv(42)); // Possibly memory leak
+    // dMY_CXT;
+    const PERL_CONTEXT *cx =  caller_cx(0, NULL);
+    printf( "2.1 %p\n", cx );
+
+    char * name =  curr_package();
+    printf( "Name: %s\n", name );
+    SV* sv;
+    sv =  newSVpvs( "Hello" );
+    // sv =  newSVpv( name, 0 );
+    mXPUSHs( sv );
+#line 361 "MyTest.c"
+	PUTBACK;
+	return;
+    }
+}
+
 #ifdef __cplusplus
 extern "C"
 #endif
@@ -314,6 +374,13 @@ XS_EXTERNAL(boot_MyTest)
 #else
     dVAR; dXSBOOTARGSXSAPIVERCHK;
 #endif
+#if (PERL_REVISION == 5 && PERL_VERSION < 9)
+    char* file = __FILE__;
+#else
+    const char* file = __FILE__;
+#endif
+
+    PERL_UNUSED_VAR(file);
 
     PERL_UNUSED_VAR(cv); /* -W */
     PERL_UNUSED_VAR(items); /* -W */
@@ -324,18 +391,19 @@ XS_EXTERNAL(boot_MyTest)
 #  endif
 #endif
 
+        newXS_deffile("MyTest::tc", XS_MyTest_tc);
 
     /* Initialisation Section */
 
-#line 155 "MyTest.xs"
-    wrap_op_checker(OP_ENTERSUB, my_check, &old_checker);
+#line 182 "MyTest.xs"
+    // wrap_op_checker(OP_ENTERSUB, my_check, &old_checker);
 
     // old_rpeepp = PL_rpeepp;
     // PL_rpeepp   = my_rpeep;
 
-    Runops_Trace_load_B(aTHX);
+    // Runops_Trace_load_B(aTHX);
 
-#line 339 "MyTest.c"
+#line 407 "MyTest.c"
 
     /* End of Initialisation Section */
 
