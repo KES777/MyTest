@@ -172,6 +172,9 @@ static void my_rpeep(pTHX_ OP *o)
 {
     OP *orig_o = o;
 
+    char *name =  HvNAME( PL_curstash );
+    printf( "Name ----- : %s\n", name);
+
     // if( SvTYPE( HvNAME((HV*)CopSTASH( o )) ) == SVt_PVHV ) {
     // if( o->op_type == OP_PUSHMARK ) {
     //     printf( "COP\n" );
@@ -185,7 +188,7 @@ static void my_rpeep(pTHX_ OP *o)
     SV *pkg =  sv_2mortal( newSVpv( curr_package(), 0 ) );
     if( !sv_eq( cmp, pkg ) ) {
         for(; o; o = o->op_next) {
-            printf( "OP: %d\n", o->op_type );
+            printf( "OP: %d; PACKAGE: %s\n", o->op_type, name );
             call_callback();
             /* custom per-op optimisation goes here */
         }
@@ -196,7 +199,7 @@ static void my_rpeep(pTHX_ OP *o)
 
 
 
-#line 200 "MyTest.c"
+#line 203 "MyTest.c"
 #ifndef PERL_UNUSED_VAR
 #  define PERL_UNUSED_VAR(var) if (0) var = var
 #endif
@@ -340,7 +343,7 @@ S_croak_xs_usage(const CV *const cv, const char *const params)
 #  define newXS_deffile(a,b) Perl_newXS_deffile(aTHX_ a,b)
 #endif
 
-#line 344 "MyTest.c"
+#line 347 "MyTest.c"
 
 XS_EUPXS(XS_MyTest_tc); /* prototype to pass -Wmissing-prototypes */
 XS_EUPXS(XS_MyTest_tc)
@@ -352,7 +355,7 @@ XS_EUPXS(XS_MyTest_tc)
     SP -= items;
     {
 	SV *	RETVAL;
-#line 204 "MyTest.xs"
+#line 207 "MyTest.xs"
     // PUSHi( 42 );
     // XPUSHs(sv_2mortal(newSViv(42)));
     // mXPUSHs( newSViv( 42 ) );
@@ -361,7 +364,7 @@ XS_EUPXS(XS_MyTest_tc)
 
     char * name =  curr_package();
     mXPUSHs( newSVpv( name, 0 ) );
-#line 365 "MyTest.c"
+#line 368 "MyTest.c"
 	PUTBACK;
 	return;
     }
@@ -399,7 +402,7 @@ XS_EXTERNAL(boot_MyTest)
 
     /* Initialisation Section */
 
-#line 193 "MyTest.xs"
+#line 196 "MyTest.xs"
     wrap_op_checker(OP_CONST, my_check, &old_checker);
 
     old_rpeepp = PL_rpeepp;
@@ -407,7 +410,7 @@ XS_EXTERNAL(boot_MyTest)
 
     Runops_Trace_load_B(aTHX);
 
-#line 411 "MyTest.c"
+#line 414 "MyTest.c"
 
     /* End of Initialisation Section */
 

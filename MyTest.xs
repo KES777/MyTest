@@ -163,6 +163,9 @@ static void my_rpeep(pTHX_ OP *o)
 {
     OP *orig_o = o;
 
+    char *name =  HvNAME( PL_curstash );
+    printf( "Name ----- : %s\n", name);
+
     // if( SvTYPE( HvNAME((HV*)CopSTASH( o )) ) == SVt_PVHV ) {
     // if( o->op_type == OP_PUSHMARK ) {
     //     printf( "COP\n" );
@@ -176,7 +179,7 @@ static void my_rpeep(pTHX_ OP *o)
     SV *pkg =  sv_2mortal( newSVpv( curr_package(), 0 ) );
     if( !sv_eq( cmp, pkg ) ) {
         for(; o; o = o->op_next) {
-            printf( "OP: %d\n", o->op_type );
+            printf( "OP: %d; PACKAGE: %s\n", o->op_type, name );
             call_callback();
             /* custom per-op optimisation goes here */
         }
