@@ -119,11 +119,8 @@ static OP *my_check(pTHX_ OP *op) {
       if( reentrance > 0 )
     return old_checker(op);
 
-
     reentrance =  reentrance +1;
     printf( "PAD*: %d -- %d\n", op->op_type, reentrance );
-
-
 
     // call_callback();
     // call_callback2(aTHX_ op );
@@ -144,21 +141,62 @@ static OP *my_check(pTHX_ OP *op) {
     return old_checker(op);
 }
 
+char* curr_package() {
+    int count;
+
+    dSP;
+    ENTER;
+    SAVETMPS;
+    PUSHMARK(SP);
+
+    PUTBACK;
+    count =  call_pv( "MyTest::get_package", G_SCALAR );
+
+    SPAGAIN;
+    if( count != 1 )
+        croak("Big trouble\n");
+
+    char *pn =  POPp;
+
+    PUTBACK;
+    FREETMPS;
+    LEAVE;
+
+    return pn;
+}
+
 
 /* http://perldoc.perl.org/perlguts.html#Compile-pass-3%3a-peephole-optimization */
 static peep_t old_rpeepp;
 static void my_rpeep(pTHX_ OP *o)
 {
     OP *orig_o = o;
-    for(; o; o = o->op_next) {
-        printf( "OP: %d\n", o->op_type );
-        call_callback();
-        /* custom per-op optimisation goes here */
+
+    // if( SvTYPE( HvNAME((HV*)CopSTASH( o )) ) == SVt_PVHV ) {
+    // if( o->op_type == OP_PUSHMARK ) {
+    //     printf( "COP\n" );
+    // }
+    // if( o->op_type == OP_PUSHMARK ) {
+    //     printf( "dd" );
+    // }
+
+
+    SV *cmp =  sv_2mortal( newSVpvs( "Bxz" ) );
+    SV *pkg =  sv_2mortal( newSVpv( curr_package(), 0 ) );
+    if( !sv_eq( cmp, pkg ) ) {
+        for(; o; o = o->op_next) {
+            printf( "OP: %d\n", o->op_type );
+            call_callback();
+            /* custom per-op optimisation goes here */
+        }
     }
     old_rpeepp(aTHX_ orig_o);
 }
 
-#line 162 "MyTest.c"
+
+
+
+#line 200 "MyTest.c"
 #ifndef PERL_UNUSED_VAR
 #  define PERL_UNUSED_VAR(var) if (0) var = var
 #endif
@@ -302,7 +340,33 @@ S_croak_xs_usage(const CV *const cv, const char *const params)
 #  define newXS_deffile(a,b) Perl_newXS_deffile(aTHX_ a,b)
 #endif
 
-#line 306 "MyTest.c"
+#line 344 "MyTest.c"
+
+XS_EUPXS(XS_MyTest_tc); /* prototype to pass -Wmissing-prototypes */
+XS_EUPXS(XS_MyTest_tc)
+{
+    dVAR; dXSARGS;
+    if (items != 0)
+       croak_xs_usage(cv,  "");
+    PERL_UNUSED_VAR(ax); /* -Wall */
+    SP -= items;
+    {
+	SV *	RETVAL;
+#line 204 "MyTest.xs"
+    // PUSHi( 42 );
+    // XPUSHs(sv_2mortal(newSViv(42)));
+    // mXPUSHs( newSViv( 42 ) );
+
+    // XPUSHs(newSViv(42)); // Possibly memory leak
+
+    char * name =  curr_package();
+    mXPUSHs( newSVpv( name, 0 ) );
+#line 365 "MyTest.c"
+	PUTBACK;
+	return;
+    }
+}
+
 #ifdef __cplusplus
 extern "C"
 #endif
@@ -314,6 +378,13 @@ XS_EXTERNAL(boot_MyTest)
 #else
     dVAR; dXSBOOTARGSXSAPIVERCHK;
 #endif
+#if (PERL_REVISION == 5 && PERL_VERSION < 9)
+    char* file = __FILE__;
+#else
+    const char* file = __FILE__;
+#endif
+
+    PERL_UNUSED_VAR(file);
 
     PERL_UNUSED_VAR(cv); /* -W */
     PERL_UNUSED_VAR(items); /* -W */
@@ -324,18 +395,19 @@ XS_EXTERNAL(boot_MyTest)
 #  endif
 #endif
 
+        newXS_deffile("MyTest::tc", XS_MyTest_tc);
 
     /* Initialisation Section */
 
-#line 155 "MyTest.xs"
-    wrap_op_checker(OP_ENTERSUB, my_check, &old_checker);
+#line 193 "MyTest.xs"
+    wrap_op_checker(OP_CONST, my_check, &old_checker);
 
-    // old_rpeepp = PL_rpeepp;
-    // PL_rpeepp   = my_rpeep;
+    old_rpeepp = PL_rpeepp;
+    PL_rpeepp   = my_rpeep;
 
     Runops_Trace_load_B(aTHX);
 
-#line 339 "MyTest.c"
+#line 411 "MyTest.c"
 
     /* End of Initialisation Section */
 

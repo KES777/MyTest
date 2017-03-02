@@ -37,7 +37,11 @@ sub import
 }
 
 sub mysub {
-	print +(caller(0))[0..2], "Im here\n";
+	print +(caller(0))[0..2], " -- Im here\n";
+}
+
+sub get_package {
+    return scalar caller;
 }
 
 1;
