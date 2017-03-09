@@ -1,3 +1,15 @@
+https://st.aticpan.org/source/CLAESJAC/Runops-Recorder-0.09/Recorder.xs
+
+static void handle_OP_PADSV(PADOP *op) {
+    CV *cv = find_runcv(NULL);
+    AV *names = (AV *) *av_fetch(CvPADLIST(cv), 0, 0);
+    last_seen_identifier = get_identifier(SvPV_nolen(AvARRAY(names)[PL_op->op_targ]));
+}
+
+https://st.aticpan.org/source/GFUJI/Devel-Optrace-0.05/Optrace.xs
+do_debpadname(pTHX_ pMY_CXT_ PADOFFSET const targ){
+
+
 MyTest version 0.01
 ===================
 
